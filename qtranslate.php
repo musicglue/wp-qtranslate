@@ -3,7 +3,7 @@
 Plugin Name: qTranslate
 Plugin URI: http://www.qianqin.de/qtranslate/
 Description: Adds userfriendly multilingual content support into Wordpress. For Problems visit the <a href="http://www.qianqin.de/qtranslate/forum/">Support Forum</a>.
-Version: 2.5.32
+Version: 2.5.39
 Author: Qian Qin
 Author URI: http://www.qianqin.de
 Tags: multilingual, multi, language, admin, tinymce, qTranslate, Polyglot, bilingual, widget, switcher, professional, human, translation, service
@@ -37,7 +37,7 @@ Tags: multilingual, multi, language, admin, tinymce, qTranslate, Polyglot, bilin
 	fi by Tatu Siltanen
 	fr by Damien Choizit
 	nl by RobV
-	sv by bear3556, johdah 
+	sv by bear3556, johdah
 	it by Lorenzo De Tomasi
 	ro, hu by Jani Monoses
 	ja by Brian Parker
@@ -46,7 +46,7 @@ Tags: multilingual, multi, language, admin, tinymce, qTranslate, Polyglot, bilin
 	ar by Mohamed Magdy
 	pt by netolazaro
 	gl by Andrés Bott
-	
+
 	Plugin Translation Contributers
 	===============================
 	en, de by Qian Qin
@@ -72,7 +72,7 @@ Tags: multilingual, multi, language, admin, tinymce, qTranslate, Polyglot, bilin
 	ru by viaestvita
 	ro by ipuiu
 	sv by tobi
-	
+
 	Sponsored Features
 	==================
 	Excerpt Translation by bastiaan van rooden (www.nothing.ch)
@@ -87,7 +87,7 @@ Tags: multilingual, multi, language, admin, tinymce, qTranslate, Polyglot, bilin
 
 // qTranslate Editor will only activated for the given version of Wordpress.
 // Can be changed to use with other versions but might cause problems and/or data loss!
-define('QT_SUPPORTED_WP_VERSION', '3.3.2');
+define('QT_SUPPORTED_WP_VERSION', '3.8.1');
 define('QT_STRING',		1);
 define('QT_BOOLEAN',	2);
 define('QT_INTEGER',	3);
@@ -104,7 +104,7 @@ define('QT_STRFTIME',			4);
 // enable the use of following languages (order=>language)
 $q_config['enabled_languages'] = array(
 		'0' => 'de',
-		'1' => 'en', 
+		'1' => 'en',
 		'2' => 'zh'
 	);
 
@@ -123,7 +123,7 @@ $q_config['auto_update_mo'] = true;
 // hide language tag for default language
 $q_config['hide_default_language'] = true;
 
-// sets default url mode 
+// sets default url mode
 // QT_URL_QUERY - query (questionmark)
 // QT_URL_PATH - pre-path
 // QT_URL_DOMAIN - pre-domain

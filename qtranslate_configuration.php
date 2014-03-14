@@ -20,22 +20,22 @@
 /* qTranslate Management Interface */
 function qtrans_adminMenu() {
 	global $menu, $submenu, $q_config;
-	
+
 	/* Configuration Page */
 	add_options_page(__('Language Management', 'qtranslate'), __('Languages', 'qtranslate'), 'manage_options', 'qtranslate', 'qtranslate_conf');
-	
+
 	/* Language Switcher for Admin */
-	
+
 	// don't display menu if there is only 1 language active
 	if(sizeof($q_config['enabled_languages']) <= 1) return;
-	
+
 	// generate menu with flags for every enabled language
 	foreach($q_config['enabled_languages'] as $id => $language) {
 		$link = add_query_arg('lang', $language);
 		$link = (strpos($link, "wp-admin/") === false) ? preg_replace('#[^?&]*/#i', '', $link) : preg_replace('#[^?&]*wp-admin/#i', '', $link);
 		if(strpos($link, "?")===0||strpos($link, "index.php?")===0) {
-			if(current_user_can('manage_options')) 
-				$link = 'options-general.php?page=qtranslate&godashboard=1&lang='.$language; 
+			if(current_user_can('manage_options'))
+				$link = 'options-general.php?page=qtranslate&godashboard=1&lang='.$language;
 			else
 				$link = 'edit.php?lang='.$language;
 		}
@@ -55,7 +55,7 @@ function qtranslate_language_form($lang = '', $language_code = '', $language_nam
 </div>
 <div class="form-field">
 	<label for="language_flag"><?php _e('Flag', 'qtranslate') ?></label>
-	<?php 
+	<?php
 	$files = array();
 	if($dir_handle = @opendir(trailingslashit(WP_CONTENT_DIR).$q_config['flag_location'])) {
 		while (false !== ($file = readdir($dir_handle))) {
@@ -90,7 +90,7 @@ function qtranslate_language_form($lang = '', $language_code = '', $language_nam
 		document.getElementById('preview_flag').style.display = "inline";
 		document.getElementById('preview_flag').src = "<?php echo trailingslashit(WP_CONTENT_URL).$q_config['flag_location'];?>" + url;
 	}
-	
+
 	switch_flag(document.getElementById('language_flag').value);
 //]]>
 </script>
@@ -193,13 +193,13 @@ function qtrans_language_columns($columns) {
 
 function qtranslate_conf() {
 	global $q_config, $wpdb;
-	
+
 	// do redirection for dashboard
 	if(isset($_GET['godashboard'])) {
 		echo '<h2>'.__('Switching Language', 'qtranslate').'</h2>'.sprintf(__('Switching language to %1$s... If the Dashboard isn\'t loading, use this <a href="%2$s" title="Dashboard">link</a>.','qtranslate'),$q_config['language_name'][qtrans_getLanguage()],admin_url()).'<script type="text/javascript">document.location="'.admin_url().'";</script>';
 		exit();
 	}
-	
+
 	// init some needed variables
 	$error = '';
 	$original_lang = '';
@@ -212,9 +212,9 @@ function qtranslate_conf() {
 	$language_flag = '';
 	$language_default = '';
 	$altered_table = false;
-	
+
 	$message = apply_filters('qtranslate_configuration_pre','');
-	
+
 	// check for action
 	if(isset($_POST['qtranslate_reset']) && isset($_POST['qtranslate_reset2'])) {
 		$message = __('qTranslate has been reset.', 'qtranslate');
@@ -232,7 +232,7 @@ function qtranslate_conf() {
 		if(isset($_POST['update_mo_now']) && $_POST['update_mo_now']=='1' && qtrans_updateGettextDatabases(true))
 			$message = __('Gettext databases updated.', 'qtranslate');
 	}
-	
+
 	if(isset($_POST['original_lang'])) {
 		// validate form input
 		if($_POST['language_na_message']=='')		$error = __('The Language must have a Not-Available Message!', 'qtranslate');
@@ -243,8 +243,8 @@ function qtranslate_conf() {
 			// new language
 			if(isset($q_config['language_name'][$_POST['language_code']])) {
 				$error = __('There is already a language with the same Language Code!', 'qtranslate');
-			} 
-		} 
+			}
+		}
 		if($_POST['original_lang']!=''&&$error=='') {
 			// language update
 			if($_POST['language_code']!=$_POST['original_lang']&&isset($q_config['language_name'][$_POST['language_code']])) {
@@ -399,7 +399,7 @@ function qtranslate_conf() {
 			}
 		}
 	}
-	
+
 	$everything_fine = ((isset($_POST['submit'])||isset($_GET['delete'])||isset($_GET['enable'])||isset($_GET['disable'])||isset($_GET['moveup'])||isset($_GET['movedown']))&&$error=='');
 	if($everything_fine) {
 		// settings might have changed, so save
@@ -440,7 +440,7 @@ function qtranslate_conf() {
 </div>
 <?php } else { ?>
 <div class="wrap">
-<h2><?php _e('Language Management (qTranslate Configuration)', 'qtranslate'); ?></h2> 
+<h2><?php _e('Language Management (qTranslate Configuration)', 'qtranslate'); ?></h2>
 <div class="tablenav"><?php printf(__('For help on how to configure qTranslate correctly, take a look at the <a href="%1$s">qTranslate FAQ</a> and the <a href="%2$s">Support Forum</a>.', 'qtranslate'), 'http://www.qianqin.de/qtranslate/faq/', 'http://www.qianqin.de/qtranslate/forum/viewforum.php?f=3'); ?></div>
 	<form action="<?php echo $clean_uri;?>" method="post">
 		<h3><?php _e('General Settings', 'qtranslate') ?></h3>
@@ -456,8 +456,8 @@ function qtranslate_conf() {
 							echo " checked='checked'";
 						}
 						echo ' />';
-						echo ' <a href="'.add_query_arg('moveup', $language, $clean_uri).'"><img src="'.WP_PLUGIN_URL.'/'.basename(__DIR__).'/arrowup.png" alt="up" /></a>';
-						echo ' <a href="'.add_query_arg('movedown', $language, $clean_uri).'"><img src="'.WP_PLUGIN_URL.'/'.basename(__DIR__).'/arrowdown.png" alt="down" /></a>';
+						echo ' <a href="'.add_query_arg('moveup', $language, $clean_uri).'"><img src="'.WP_PLUGIN_URL.'/qtranslate/arrowup.png" alt="up" /></a>';
+						echo ' <a href="'.add_query_arg('movedown', $language, $clean_uri).'"><img src="'.WP_PLUGIN_URL.'/qtranslate/arrowdown.png" alt="down" /></a>';
 						echo ' <img src="' . trailingslashit(WP_CONTENT_URL) .$q_config['flag_location'].$q_config['flag'][$language] . '" alt="' . $q_config['language_name'][$language] . '" /> ';
 						echo ' '.$q_config['language_name'][$language] . "</label><br />\n";
 					}
@@ -580,7 +580,7 @@ function qtranslate_conf() {
 				document.getElementById('qtranslate-show-advanced').style.display='none';
 				return false;
 			}
-			
+
 			if(location.hash!='#advanced_settings') {
 					document.getElementById('qtranslate-show-advanced').style.display='inline';
 					document.getElementById('qtranslate-advanced').style.display='none';
