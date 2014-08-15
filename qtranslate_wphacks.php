@@ -51,42 +51,36 @@ function qtrans_modifyTermFormFor($term) {
 function qtrans_modifyRichEditor($old_content) {
 	global $q_config;
 	$init_editor = true;
-	if($GLOBALS['wp_version'] != QT_SUPPORTED_WP_VERSION) {
-		if(!(isset($_REQUEST['qtranslateincompatiblemessage'])&&$_REQUEST['qtranslateincompatiblemessage']=="shown")) {
-			echo '<div class="updated" id="qtrans_imsg">'.__('The qTranslate Editor has disabled itself because it hasn\'t been tested with your Wordpress version yet. This is done to prevent Wordpress from malfunctioning. You can reenable it by <a href="javascript:qtrans_editorInit();" title="Activate qTranslate" id="qtrans_imsg_link">clicking here</a> (may cause <b>data loss</b>! Use at own risk!). To remove this message permanently, please update qTranslate to the <a href="http://www.qianqin.de/qtranslate/download/">corresponding version</a>.', 'qtranslate').'</div>';
-		}
-		$init_editor = false;
-	}
 	// save callback hook
-		
+
 	preg_match("/<textarea[^>]*id=\"([^']+)\"/",$old_content,$matches);
 	$id = $matches[1];
 	preg_match("/cols=\"([^\"]+)\"/",$old_content,$matches);
 	$cols = $matches[1];
 	// don't do anything if not editing the content
 	if($id!="content") return $old_content;
-	
+
 	// don't do anything to the editor if it's not rich
 	if(!user_can_richedit()) {
 		//echo '<p class="updated">'.__('The qTranslate Editor could not be loaded because WYSIWYG/TinyMCE is not activated in your profile.').'</p>';
 		return $old_content;
 	}
-	
+
 	// remove wpautop
 	if('html' != wp_default_editor()) {
 		remove_filter('the_editor_content', 'wp_richedit_pre');
 	}
-	
+
 	$content = "";
 	$content_append = "";
-	
+
 	// create editing field for selected languages
 	$qt_textarea = '<textarea id="qtrans_textarea_'.$id.'" name="qtrans_textarea_'.$id.'" tabindex="2" cols="'.$cols.'" style="display:none" onblur="qtrans_save(this.value);"></textarea>';
 	$old_content = preg_replace('#(<textarea[^>]*>.*</textarea>)#', '$1'.$qt_textarea, $old_content);
 
 	// do some crazy js to alter the admin view
 	$content .="<script type=\"text/javascript\">\n// <![CDATA[\n";
-	
+
 	// include needed js functions
 	$content .= $q_config['js']['qtrans_is_array'];
 	$content .= $q_config['js']['qtrans_xsplit'];
@@ -101,7 +95,7 @@ function qtrans_modifyRichEditor($old_content) {
 
 	$content .="function qtrans_editorInit1() {\n";
 	$content .= $q_config['js']['qtrans_switch'];
-	
+
 	// insert language, visual and html buttons
 	$el = qtrans_getSortedLanguages();
 	foreach($el as $language) {
@@ -111,24 +105,24 @@ function qtrans_modifyRichEditor($old_content) {
 	foreach($el as $language) {
 		$content .= qtrans_createEditorToolbarButton($language, $id);
 	}
-	
+
 	$content = apply_filters('qtranslate_toolbar', $content);
-	
+
 	// hide old title bar
 	$content .= "document.getElementById('titlediv').style.display='none';\n";
-	
+
 	$content .="}\n";
 	$content .="// ]]>\n</script>\n";
-	
+
 	$content_append .="<script type=\"text/javascript\">\n// <![CDATA[\n";
 	$content_append .="function qtrans_editorInit2() {\n";
-	
+
 	// show default language tab
 	$content_append .="document.getElementById('qtrans_select_".$q_config['default_language']."').className='wp-switch-editor switch-tmce switch-html';\n";
 	// show default language
 	$content_append .="var text = document.getElementById('".$id."').value;\n";
 	$content_append .="qtrans_assign('qtrans_textarea_".$id."',qtrans_use('".$q_config['default_language']."',text));\n";
-	
+
 	$content_append .="}\n";
 
 	$content_append .="function qtrans_editorInit3() {\n";
@@ -146,7 +140,7 @@ function qtrans_modifyRichEditor($old_content) {
 	}
 	$content_append = apply_filters('qtranslate_modify_editor_js', $content_append);
 	$content_append .="// ]]>\n</script>\n";
-	
+
 	return $content.$old_content.$content_append;
 }
 
@@ -222,7 +216,7 @@ function qtrans_insertTermInput($id,$name,$term,$language){
 	}
 	if($language == $q_config['default_language']) {
 		$html .="
-			i.onchange = function() { 
+			i.onchange = function() {
 				var il = document.getElementsByTagName('input');
 				var ins = null;
 				for(var j = 0; j < il.length; j++) {
@@ -243,7 +237,7 @@ function qtrans_insertTermInput($id,$name,$term,$language){
 		d.appendChild(i);
 		ins.parentNode.insertBefore(d,ins);
 		";
-	return $html;	
+	return $html;
 }
 
 function qtrans_insertTermInput2($id,$name,$term,$language){
@@ -270,7 +264,7 @@ function qtrans_insertTermInput2($id,$name,$term,$language){
 	}
 	if($language == $q_config['default_language']) {
 		$html .="
-			i.onchange = function() { 
+			i.onchange = function() {
 				var il = document.getElementsByTagName('input');
 				var ins = null;
 				for(var j = 0; j < il.length; j++) {
@@ -308,7 +302,7 @@ function qtrans_insertTitleInput($language){
 		var tw = document.createElement('div');
 		var ti = document.createElement('input');
 		var slug = document.getElementById('edit-slug-box');
-		
+
 		ti.type = 'text';
 		ti.id = 'qtrans_title_".$language."';
 		ti.tabIndex = '1';
@@ -317,9 +311,9 @@ function qtrans_insertTitleInput($language){
 		ti.className = 'qtrans_title_input';
 		h.className = 'qtrans_title';
 		tw.className = 'qtrans_title_wrap';
-		
+
 		qtd.className = 'postarea';
-		
+
 		h.appendChild(l);
 		tw.appendChild(ti);
 		qtd.appendChild(h);
@@ -328,9 +322,9 @@ function qtrans_insertTitleInput($language){
 		$html.="if(slug) qtd.appendChild(slug);";
 	$html.="
 		td.parentNode.insertBefore(qtd,td);
-		
+
 		";
-	return $html;	
+	return $html;
 }
 
 function qtrans_createEditorToolbarButton($language, $id, $js_function = 'switchEditors.go', $label = ''){
